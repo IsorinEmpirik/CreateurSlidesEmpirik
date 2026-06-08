@@ -308,12 +308,44 @@
   <!-- ============================== -->
   <h2><span class="num">5.</span> Premier lancement</h2>
 
-  <p>Quand tout est installé et validé, voici comment démarrer une présentation. Ouvre Claude Code sur ce dossier et utilise ce prompt :</p>
+  <p>Quand tout est installé et validé, ouvre Claude Code sur ce dossier. <strong>Deux modes de lancement</strong> sont disponibles, selon que ton Claude Code supporte les workflows dynamiques.</p>
+
+  <h3>Mode A — Workflow dynamique (recommandé si supporté)</h3>
+
+  <p>Si tu as <strong>Claude Code ≥ v2.1.154</strong> ET le toggle <code>Dynamic workflows</code> activé dans <code>/config</code>, utilise la slash command dédiée :</p>
+
+  <div class="prompt-block">
+    <button class="copy-btn" onclick="copyPrompt(this)">Copier la commande</button>
+    <div class="label">Commande slash</div>
+    <div class="text">/empirik-slides
+
+Je veux créer une présentation pour [NOM DU CLIENT].
+Sujet : [SUJET].
+Public cible : [DIRECTION MARKETING / COMITÉ / ÉQUIPE TECHNIQUE / ...].
+Objectif : [PITCH / AUDIT / BILAN / RESTITUTION DATA / ...].
+Inputs : [LISTE DES FICHIERS / DATA / BRIEF].</div>
+  </div>
+
+  <p>La commande <code>/empirik-slides</code> (définie dans <code>.claude/commands/empirik-slides.md</code>) déclenche un <strong>workflow dynamique multi-agents</strong> qui orchestre toutes les phases avec sous-agents indépendants. Avantages :</p>
+  <ul>
+    <li><strong>Garantie d'exécution mécanique</strong> : les sous-agents QA, Devil's advocate, exhaustivité, Duarte sont invoqués par le workflow, pas par interprétation textuelle</li>
+    <li><strong>Élimine self-preferential bias</strong> : l'agent producteur ne valide jamais son propre travail</li>
+    <li><strong>Élimine agentic laziness</strong> : chaque sous-agent a une mission isolée et atomique</li>
+    <li><strong>Reproductible</strong> : presse <code>s</code> dans le menu <code>/workflows</code> après 1ère exécution réussie pour le sauvegarder localement</li>
+  </ul>
+
+  <div class="warning">
+    <strong>Coût tokens</strong> : un workflow multi-agents consomme significativement plus de tokens qu'une exécution séquentielle simple. Accepté chez Empirik (la qualité prime sur la rapidité). Pour pres ultra-simples (5 slides internes), préférer le mode B ci-dessous.
+  </div>
+
+  <h3>Mode B — Prompt manuel (fallback si pas de workflows dynamiques)</h3>
+
+  <p>Si ton Claude Code ne supporte pas encore les workflows dynamiques, utilise ce prompt long qui décrit le workflow en texte :</p>
 
   <div class="prompt-block">
     <button class="copy-btn" onclick="copyPrompt(this)">Copier le prompt</button>
-    <div class="label">Démarrer une nouvelle présentation</div>
-    <div class="text">Je veux créer une nouvelle présentation pour [NOM DU CLIENT]. Le sujet est : [SUJET]. Le public cible est : [DIRECTION MARKETING / COMITÉ DE DIRECTION / ÉQUIPE TECHNIQUE / ETC.]. L'objectif est : [PITCH / AUDIT / BILAN / RESTITUTION DATA / ETC.]. Voici les inputs disponibles : [LISTE DES FICHIERS / DATA / BRIEF]. Applique strictement le workflow CLAUDE.md en 8 étapes : (1) lis CLAUDE.md + PROCESS-ANTI-ERREURS.md + MASTER-CHECKLIST.md + guide_design_slides.md + guide-slides-data-storytelling.md + guide_storytelling_presentations.md + dataviz-guide.md, (2) propose-moi 2 à 3 angles narratifs distincts avec structure et nombre de slides estimé, (3) attends ma validation, (4) détaille le plan slide par slide avec type de graphique justifié pour chaque slide data, (5) attends mon go final, (6) génère le .pptx, (7) lance la QA structurée, (8) PRODUIS LE RAPPORT QA EXHAUSTIF en remplissant MASTER-CHECKLIST.md (~150 items, ✅/❌ avec preuves point par point, score global, défauts résiduels arbitrés). N'engage AUCUNE génération avant ma validation explicite du plan, et ne livre AUCUN .pptx sans le rapport QA. En pre-flight : liste les marques/outils à intégrer en logos, lance scripts/fetch_logos.py pour les manquants.</div>
+    <div class="label">Démarrer une nouvelle présentation (mode séquentiel)</div>
+    <div class="text">Je veux créer une nouvelle présentation pour [NOM DU CLIENT]. Le sujet est : [SUJET]. Le public cible est : [DIRECTION MARKETING / COMITÉ DE DIRECTION / ÉQUIPE TECHNIQUE / ETC.]. L'objectif est : [PITCH / AUDIT / BILAN / RESTITUTION DATA / ETC.]. Voici les inputs disponibles : [LISTE DES FICHIERS / DATA / BRIEF]. Applique strictement le workflow CLAUDE.md en 8 étapes : (1) lis CLAUDE.md + PROCESS-ANTI-ERREURS.md + MASTER-CHECKLIST.md + guide_design_slides.md + guide-slides-data-storytelling.md + guide_storytelling_presentations.md + dataviz-guide.md + DESIGN_EMPIRIK.md et produis un rapport en ACTIONS TACTIQUES (pas résumés), (2) détecte si sujet data-driven → drapeau Pathos + 3 contre-poisons à choisir, propose 2-3 angles narratifs, attends ma validation, (3.5) produis le triplet Audience/Action/Insight (Knaflic §0), (4) détaille le plan slide par slide avec les 6 artifacts obligatoires (couverture brouillon, avocat du diable, slides récap, voies dataviz, slides question, plan émotionnel Duarte), (5) attends mon go final, (6) génère le .pptx (pre-flight logos via fetch_logos.py --auto, graphes Voie 3 via generate_chart.py avec PNG sans texte + JSON overlays), (7) lance le panel parallèle de 3 sous-agents (exhaustivité factuelle, audit Duarte 9 critères, conformité technique PptxGenJS), (8) PRODUIS LE RAPPORT QA via un SOUS-AGENT INDÉPENDANT qui remplit MASTER-CHECKLIST (~170 items, preuves ATOMIQUES obligatoires, anti-cascade, comptages chiffrés pour règles quantifiables), (8.5) lance le sous-agent Devil's advocate qui challenge toutes les preuves et retraite en ❌ les ✅ circulaires. N'engage AUCUNE génération avant ma validation explicite du plan, et ne livre AUCUN .pptx sans les 2 rapports QA (sous-agent + devil's advocate).</div>
   </div>
 
   <div class="note">
