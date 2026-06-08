@@ -100,6 +100,27 @@ Compensation prévue dans cet angle :
 
 L'utilisateur valide en connaissance de cause au lieu de découvrir le manque de Pathos à la fin du deck. **Le défaut par défaut sur sujet data-driven est le format McKinsey "rapport d'audit" qui maximise Logos et tue le Pathos** — c'est ce que la pres "Angora vs Sphinx" v1 a illustré (score Duarte 55-60% au lieu de 85%).
 
+**⛔ Validation explicite OBLIGATOIRE de l'utilisateur sur le contre-poison choisi AVANT de passer à l'étape 3.5**
+
+Le sujet est data-driven (zéro personnage humain, zéro anecdote dans le brouillon) ? Tu dois proposer **3 contre-poisons** explicitement à l'utilisateur, et attendre qu'il choisisse :
+
+```
+⚠️ Risque Pathos faible détecté. Pour que la pres résonne, choisis l'un des
+3 contre-poisons (obligatoire avant étape 3.5) :
+
+(a) Personnage incarné fil rouge — la pres parle À une persona précise
+    (Marc et Sophie, 32 et 28 ans, premiers acquéreurs d'un chat...) et
+    elle apparaît dans plusieurs slides
+(b) Anecdote d'ouverture — slide 1 ou 2 = mini-histoire vraie (1-2 phrases)
+    qui plante le décor émotionnel
+(c) Métaphore filée tout au long du deck — un parallèle filé du début à
+    la fin ("Choisir un chat = choisir un véhicule pour 15 ans...")
+
+Quel contre-poison veux-tu pour cette pres ? (a / b / c / les trois)
+```
+
+**Pas de "go" à l'étape 3.5 tant que l'utilisateur n'a pas choisi.** Sans contre-poison explicitement validé, la pres glisse mécaniquement vers le format audit McKinsey factuel.
+
 #### Format des angles
 
 
@@ -120,7 +141,36 @@ OPTION B : [Nom de l'angle]
 ### Étape 3 — ATTENDRE la validation explicite
 Pas de génération sans validation. Si l'utilisateur dit juste "ok" ou "go", reconfirmer quelle option est retenue.
 
-### Étape 4 — Détailler le plan retenu slide par slide (avec 5 artifacts obligatoires)
+### Étape 3.5 — Audience + Action + Insight central (Knaflic §0 obligatoire)
+
+**Avant de détailler le plan slide par slide, produire 3 lignes qui ancrent la pres** :
+
+```
+ÉTAPE 3.5 — Triplet Audience / Action / Insight (obligatoire, anti-pres-vague)
+
+AUDIENCE : <personne PRÉCISE>
+  → Pas "le client", pas "le lecteur", pas "les stakeholders"
+  → Format attendu : rôle, contexte, peur principale, désir principal
+  → Ex : "Le futur propriétaire entre 30 et 45 ans, qui hésite entre 2 races
+          de chat, a peur des frais véto, désire un animal calme et durable"
+
+ACTION VOULUE : <verbe + objet concret>
+  → Ce que l'audience doit FAIRE concrètement après la pres
+  → Ex : "Choisir l'Angora plutôt que le Sphinx pour son premier chat"
+  → ❌ "Comprendre les différences" (passif) / ✅ "Choisir l'Angora" (actif)
+
+INSIGHT CENTRAL : 1 phrase max
+  → La chose nouvelle / contre-intuitive que la pres révèle
+  → Ex : "Le Sphinx a un coût de vie 2x supérieur ET une espérance de vie
+         3 ans inférieure à l'Angora — la séduction esthétique cache un
+         deal défavorable"
+```
+
+**Test obligatoire** : si tu ne peux pas raconter l'histoire à voix haute en 90 secondes à partir de ces 3 lignes, NE PASSE PAS à l'étape 4. Reviens travailler le triplet.
+
+**Pourquoi cette étape** : Knaflic §0 ("papier + post-it 20 min") insiste sur le fait que le détail slide par slide AVANT l'ancrage Audience/Action/Insight produit une pres techniquement riche mais sans direction claire. Le triplet est la boussole du deck — sans lui, chaque slide est une décision isolée.
+
+### Étape 4 — Détailler le plan retenu slide par slide (avec 6 artifacts obligatoires)
 
 Numéro + titre + type de slide + contenu principal + élément visuel prévu.
 
@@ -130,7 +180,7 @@ Numéro + titre + type de slide + contenu principal + élément visuel prévu.
 **Pour chaque section** : annoncer la **mécanique storytelling** :
 > "Section 2 : what is (constat actuel client) → what could be (potentiel) → point de bascule (insight) → preuve (data)."
 
-#### ⛔ 5 artifacts obligatoires à produire dans le plan détaillé (anti-omission)
+#### ⛔ 6 artifacts obligatoires à produire dans le plan détaillé (anti-omission)
 
 Ces 5 artifacts forcent l'application de règles que les agents IA ont tendance à zapper silencieusement. **Sans ces 5 artifacts dans le plan, pas de "go" à donner.**
 
@@ -241,6 +291,17 @@ f) MÉTAPHORE / ANALOGIE CENTRALE (le sujet "est comme...")
    → Ex : "Choisir un chat, c'est comme choisir un véhicule pour 15 ans :
        le Sphinx est une voiture de course (séduisant, exigeant, coûteux),
        l'Angora est un break familial (fiable, économique, durable)"
+
+g) AUDIENCE HÉROÏSÉE (profil incarné, pas une étiquette)
+   → Identité précise du "héros" de la pres : rôle, âge, contexte, peur,
+     désir. La pres doit lui parler à LUI, pas à "les stakeholders".
+   → Doit reprendre / approfondir l'AUDIENCE de l'Étape 3.5
+   → Ex : "Marc et Sophie, 32 et 28 ans, premiers acquéreurs d'un chat,
+          en appartement T3, peur 1 : finir avec des frais véto chroniques,
+          peur 2 : choisir un animal qui ne s'adapte pas à leur rythme,
+          désir : un compagnon calme pour 15+ ans"
+   → L'audience est NOMMÉE quand pertinent (pas obligatoire mais
+     puissant) et présente dans le texte du deck via "vous" et projections.
 ```
 
 **Pourquoi cet artifact est obligatoire** : la conception initiale du process Empirik a privilégié la rigueur factuelle (top-down, dataviz, exhaustivité, sources, charte). C'est puissant mais déséquilibré : sans plan émotionnel explicite, le Claude exécute par défaut un format McKinsey audit où Pathos = 0%. Ce manquement est **structurel**, pas accidentel. La pres v1 "Angora vs Sphinx" a obtenu 100% sur la checklist factuelle mais 55% sur Duarte — preuve que l'angle mort est dans le process lui-même.
@@ -301,30 +362,71 @@ Cela affiche le texte tel qu'extrait du PPTX. Sert à :
 
 **Sans ce rapport, pas de livraison.** L'objectif est la **traçabilité explicite** de l'application de chaque règle Empirik à cette présentation, point par point.
 
-**Procédure** :
+#### ⛔ RÈGLE STRUCTURELLE : sous-agent QA INDÉPENDANT (jamais l'agent producteur)
+
+**Le rapport QA est rempli par un sous-agent `general-purpose` indépendant, JAMAIS par l'agent producteur.** L'agent producteur a un biais d'auto-validation systématique : il a coché 17/17 blocs ✅ alors que 3 méritaient ❌ (audit "Angora vs Sphinx v2"). L'auto-évaluation est structurellement compromise.
+
+**Principe d'inversion de la charge de la preuve** : par défaut, le travail a un défaut. C'est à l'agent producteur de fournir des preuves atomiques, le sous-agent QA tranche.
+
+**Mission du sous-agent QA** (à lancer en début d'étape 8) :
+> "Tu es l'auditeur indépendant du livrable. Voici MASTER-CHECKLIST.md (~170 items) et le PPTX généré + son script source + le PDF de QA visuelle.
+>
+> **Mandat strict** : remplis le rapport QA à la place de l'agent producteur. Mode 'devil's advocate' : par défaut chaque bloc est en ❌, c'est à toi de trouver les preuves atomiques qui justifient un ✅. Sans preuve atomique, c'est ❌.
+>
+> **Règles** :
+> - Une preuve atomique = citation directe + référence (slide N, ligne L du script, sortie de commande)
+> - Une preuve qui pointe vers un autre ✅ d'un autre bloc est NULLE (anti-cascade)
+> - Pour les règles quantifiables (ex : voix vous, em-dashes, ratio dataviz), exiger un comptage explicite
+> - Verdict final : score global + liste des blocs ❌ avec justification factuelle"
+
+**Pourquoi cette règle absolue** : l'agent producteur optimise la métrique mesurée (✅ cochés), pas la métrique voulue (qualité réelle). Si on lui demande de remplir la checklist, il maximise les ✅. Le sous-agent QA indépendant ne partage pas ce biais — sa réussite c'est de TROUVER les défauts, pas de valider le travail.
+
+#### Procédure étape 8
+
 1. Créer un fichier `qa-rapport-<nom-pres>.md` à côté du `.pptx` final
 2. Copier-coller intégralement le contenu de `MASTER-CHECKLIST.md` dans ce fichier
-3. **Pour chaque item** (~170 au total) : statuer `✅` ou `❌` après **contrôle réel et documenté** (pas déclaratif)
-4. **Pour chaque ✅, fournir UNE preuve concrète** :
-   - Citation directe (ex : "vérifié sur slide 7 : '4,5%' bien en orange #E9540D, gras")
-   - Référence de fichier/ligne (ex : "ligne 234 du script : fontFace: 'Poppins SemiBold' confirmé")
-   - Capture d'écran ou description visuelle (ex : "image qa-slides/slide-08.jpg : titre centré, pas de débordement, alignement strict OK")
-   - Sortie d'une commande (ex : "grep -c '—' build.js → 0")
-5. Pour les `❌` : remplir le tableau "Rapport des défauts résiduels" (raison + impact + arbitrage utilisateur)
-6. Calculer le score global et lister les blocs où il manque des ✅
-7. Joindre ce rapport à la livraison
+3. **Lancer le sous-agent QA indépendant** avec le mandat ci-dessus + les fichiers
+4. Le sous-agent statue `✅` ou `❌` pour chaque item (~170 au total), avec **preuve atomique pour chaque ✅**
+5. L'agent producteur récupère le rapport, lit les ❌, propose des corrections au cas par cas
+6. **Pas de cycle infini** : 2 itérations max producteur ↔ auditeur. Si après 2 tours il reste des ❌ sur des blocs non-négociables, signaler explicitement à l'utilisateur pour arbitrage
 
-**Score cible** : 100% ✅ sur les blocs "non négociable" (A, B, C, D, E, F, H, J, K, L, P, R, S, T, U, W, Y, **Z**), ≥ 90% ✅ sur les blocs "qualité" (G, I, M, N, O, Q, V).
+**Score cible** : 100% ✅ sur les blocs "non négociable" (A, B, C, D, E, F, H, J, K, L, P, R, S, T, U, W, Y, **Z**, **AA**, **BB**, **CC**), ≥ 90% ✅ sur les blocs "qualité" (G, I, M, N, O, Q, V).
 
-> **Le bloc Z (Conformité Duarte) est non négociable** suite à l'audit "Angora vs Sphinx v1" qui a montré que 100% sur les blocs factuels n'empêche pas une pres émotionnellement plate. Sans Z, le système reste calibré pour la rigueur factuelle au détriment de la résonance.
+#### Format des preuves atomiques (anti-cascade)
 
-#### ⛔ Anti-tricherie : ✅ sans preuve = ❌ par défaut
+| ✅ ATOMIQUE (accepté) | ❌ CIRCULAIRE (refusé) |
+|------------------------|--------------------------|
+| "vérifié sur slide 7 : '4,5%' bien en orange #E9540D, gras (image qa-slides/slide-07.jpg)" | "preuve = confirmé bloc F" |
+| "ligne 234 du script : `fontFace: 'Poppins SemiBold'` confirmé" | "preuve = voir bloc T sur la voix vous" |
+| "grep -c '—' build.js → 0" | "preuve = score global 98% donc OK" |
+| "comptage manuel : 12 slides sur 24 contiennent 'vous' = 50%, donc ❌ (seuil 70%)" | "preuve = règle §2.2 appliquée" |
 
-Un agent IA peut être tenté de cocher ✅ "à la louche" sur 150 items pour finir vite. **Règle stricte** : tout ✅ sans preuve concrète est considéré comme ❌ par l'utilisateur. Si tu n'as pas le temps/moyen de vérifier un item, écrire honnêtement `❓ non vérifié — <raison>` plutôt que ✅.
+Une preuve qui renvoie à un autre ✅ est NULLE. Une preuve doit être traçable à un élément CONCRET du livrable (slide précise, ligne précise, sortie de commande précise).
 
-**Auto-test final** : avant de livrer, scroll dans le rapport et compte les ✅ qui n'ont AUCUNE preuve. Si > 5 → recommencer la QA, ce n'est pas fini.
+#### ⛔ Anti-tricherie : ✅ sans preuve atomique = ❌ par défaut
 
-**Pourquoi cette étape** : avec 170+ règles cumulées, le risque d'en oublier une silencieusement est élevé. Un ❌ explicite et arbitré vaut infiniment mieux qu'un ❌ silencieux qui découvre la faille trois semaines plus tard. Et un ✅ avec preuve vaut infiniment mieux qu'un ✅ déclaratif sans contrôle réel.
+Pour les règles quantifiables (voix "vous", em-dashes, ratio dataviz, exhaustivité brouillon, proportions actes Duarte), exiger un **comptage explicite** dans la preuve :
+- ✅ "12 slides standard sur 17 contiennent 'vous'/'votre' = 70,6% → OK (seuil 70%)"
+- ❌ "voix vous appliquée partout — ✅"
+
+### Étape 8.5 — Auto-test fidélité (sous-agent Devil's advocate, post-rapport QA)
+
+**Pourquoi cette étape** : même un sous-agent QA indépendant peut laisser passer des preuves circulaires ou superficielles. Une 2ème passe spécifiquement orientée "challenge des preuves" attrape les défauts résiduels.
+
+**Mission du 3ème sous-agent (Devil's advocate)** :
+> "Voici le rapport QA produit par le sous-agent QA. Ton mandat unique : challenger TOUTES les preuves des blocs cochés ✅.
+>
+> Pour chaque ✅ :
+> - La preuve est-elle atomique (citation directe + référence fichier:ligne ou slide N) ? Si non → retraite en ❌
+> - La preuve est-elle circulaire (pointe vers un autre ✅) ? Si oui → retraite en ❌
+> - La preuve est-elle quantifiée pour les règles quantifiables ? Si non → retraite en ❌
+> - La preuve est-elle contradictoire avec un fait vérifiable du livrable ? Si oui → retraite en ❌
+>
+> Focus prioritaire (blocs historiquement laxistes) : voix 'vous' (Bloc BB), couverture brouillon (Artifact 1), contraste stratégique (Bloc F), exhaustivité PDF source (Bloc U), conformité Duarte (Bloc Z).
+>
+> Verdict final attendu : nombre de ✅ retraités en ❌. Si > 3 retraitements, le rapport QA initial est REJETÉ, l'agent producteur doit recommencer avec corrections."
+
+**Pas de livraison sans Étape 8.5 passée.** Cette étape attrape les "✅ déclaratifs" que le sous-agent QA aurait laissé filer.
 
 ---
 
@@ -333,8 +435,28 @@ Un agent IA peut être tenté de cocher ✅ "à la louche" sur 150 items pour fi
 ### 1.1 Workflow fichiers de data
 Quand l'utilisateur fournit un fichier de data : ranger dans `data-brute/` du projet, consigner le contexte, **attendre** la demande d'analyse. Ne pas lancer d'exploration automatique.
 
-### 1.2 Pas d'invention de data
+### 1.2 Pas d'invention de data + distinction DATA vs CALCUL vs ESTIMATION
+
 Échec API, extraction incomplète, donnée ambiguë → **signaler explicitement**, jamais combler par de l'inventé. Préférer "X/N réussis, Y erreurs" à un résultat propre fabriqué.
+
+#### Convention typographique obligatoire : 3 catégories de valeurs
+
+Toute valeur numérique affichée sur une slide doit appartenir à l'une de ces 3 catégories, **visuellement distinguées** :
+
+| Catégorie | Définition | Format slide | Footnote requise |
+|-----------|------------|--------------|------------------|
+| **1. DATA SOURCÉE** | Valeur directement issue du brouillon ou d'une source citée | Format normal : `4,5%` | Mention de la source en footer (`Source : LLM Brand Tracker · Mai 2026`) |
+| **2. CALCUL RECONSTRUIT** | Valeur obtenue par addition/multiplication/extrapolation d'hypothèses | Préfixe `~` : `~11 700 €` | Footnote obligatoire : `*estimation calculée à partir de [hypothèses A + B + C]` |
+| **3. ESTIMATION FRAGILE** | Valeur marquée "à vérifier" ou "à confirmer" dans le brouillon, ou source non vérifiée | Badge orange `à reconfirmer` visible sur la slide | Mention explicite du caractère non confirmé |
+
+**❌ Interdiction** : présenter une valeur de catégorie 2 ou 3 comme si c'était une catégorie 1 (sans marquage visuel). Bug commis sur "Angora vs Sphinx" : "11 700 € sur 15 ans" présenté comme un total ferme alors que c'était un calcul reconstruit à partir de 5 hypothèses non sourcées.
+
+**✅ Exemple correct** :
+- DATA : `4,5%` + footer `Source : Brand Tracker · Mai 2026`
+- CALCUL : `~11 700 €*` + footnote `*estimation = 500€/an chauffage + 320€/an véto + 150€/an soins × 15 ans, hypothèses non sourcées`
+- ESTIMATION : `+40% frais véto` + badge `à reconfirmer` (annoncé "à vérifier" dans le brouillon)
+
+**Pourquoi cette règle** : sans distinction visuelle, l'audience traite un calcul reconstruit comme un fait établi. C'est de la fausse précision qui se retourne contre la crédibilité de l'agence quand le client challenge la valeur.
 
 ### 1.3 Challenger chaque reco (avant validation du plan)
 Pour chaque reco que l'utilisateur formule ou que je propose, mode brainstorming avocat du diable :
@@ -386,11 +508,33 @@ Toute pres commence par la **conclusion/recommandation** avant le détail. À 3 
 
 **Recommandation finale OBLIGATOIRE** : chaque deck data se termine par une action recommandée explicite. Formule type : `Nous recommandons de <verbe action> pour <résultat attendu>`. Donner une option imparfaite vaut mieux que "voici les données, à vous de décider" — cela recentre la discussion sur "comment agir" plutôt que "donnez plus de data". **Si après l'analyse aucune action n'est formulable** (pas de leviers, pas de hypothèse à tester) → ce n'est pas une présentation, c'est de la donnée brute : la livrer en rapport markdown, pas en deck. Source : Knaflic / Storytelling with Data.
 
-### 2.2 Perspective "vous" (client) — toujours
+### 2.2 Perspective "vous" (client) — quantifiée et auto-vérifiable
+
 - ❌ "Nous allons faire", "notre équipe"
 - ✅ "Vous allez bénéficier", "votre marque", "vos consommateurs"
 
 La présentation parle AU client, pas DE ce que fait l'agence.
+
+#### Seuil quantifié obligatoire (anti-règle-floue)
+
+La règle "voix vous partout" est qualitative et permet le glissement silencieux ("4 slides sur 24 contiennent vous" → coché ✅ à tort dans l'audit Angora v2). **Règle quantifiée stricte** :
+
+- **Toute slide standard** (hors cover, section dividers, citation pure, CTA) **DOIT contenir au moins UNE occurrence** de `vous` / `votre` / `vos` dans le titre OU dans le corps.
+- **Seuil minimal acceptable au niveau du deck** : 70% des slides standard contiennent au moins une occurrence "vous".
+- **Si < 70% → défaut bloquant**, à corriger en reformulant les titres et contenus à la 3e personne (le client / le propriétaire / le décideur) vers la 2e personne (vous / votre).
+- **"Nous" est INTERDIT** sauf dans "Nous recommandons" en titre d'une slide reco unique finale (et même là, préférer "Adoptez..." / "Choisissez..." pour rester en "vous").
+
+#### Auto-test grep obligatoire avant livraison
+
+```bash
+# Compter les occurrences "vous/votre/vos" dans le script :
+grep -ciE "\\b(vous|votre|vos)\\b" build_xxx.js
+
+# Comparer au nombre de slides standard (= total slides - cover - dividers - CTA)
+# Si ratio < 70% → corriger AVANT export
+```
+
+Ce test doit apparaître explicitement dans le rapport QA (Bloc BB de MASTER-CHECKLIST), avec le comptage chiffré comme preuve atomique.
 
 ### 2.3 Expliquer les concepts techniques visuellement
 - Ne jamais supposer que le client connaît les termes (queries fan out, Common Crawl, GEO…)

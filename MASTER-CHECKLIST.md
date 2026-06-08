@@ -2,10 +2,36 @@
 
 > **OBLIGATOIRE après chaque génération de slides.**
 > À produire en markdown comme rapport de livraison à côté du `.pptx`.
-> Pas de livraison sans ce rapport rempli avec preuve point par point.
->
-> Objectif : garantir que **TOUTES** les règles Empirik sont appliquées à chaque présentation, sans en oublier une seule.
-> Format : pour chaque item, cocher `✅` ou `❌`. Si `❌`, expliquer pourquoi (impossible à appliquer dans ce cas, ou défaut résiduel accepté avec l'utilisateur).
+> Pas de livraison sans ce rapport rempli avec preuves atomiques point par point.
+
+---
+
+## ⛔ RÈGLE FONDAMENTALE — Le rapport est rempli par un sous-agent INDÉPENDANT
+
+**L'agent producteur n'a PAS LE DROIT de cocher ✅ lui-même.** L'auto-évaluation est structurellement compromise : sur l'audit "Angora vs Sphinx v2", l'agent producteur avait coché 17/17 blocs ✅ alors que 3 méritaient ❌.
+
+**Procédure correcte** :
+1. L'agent producteur livre : .pptx + script source + PDF de QA visuelle + brouillon source
+2. **Un sous-agent QA indépendant** lance cette checklist en mode "devil's advocate" : par défaut chaque bloc est ❌, il faut une PREUVE ATOMIQUE pour passer en ✅
+3. L'agent producteur lit le rapport, propose des corrections sur les ❌, le sous-agent re-statue
+4. **Un 3ème sous-agent (Devil's advocate)** challenge le rapport final : il retraite en ❌ tout ✅ dont la preuve est circulaire, absente, ou non quantifiée
+
+Voir CLAUDE.md §0 Étape 8 et Étape 8.5 pour les mandats détaillés des sous-agents.
+
+---
+
+## ⛔ ANTI-CASCADE — Format des preuves atomiques obligatoire
+
+Toute case ✅ doit s'accompagner d'une **preuve atomique** : citation directe + référence à un élément CONCRET et VÉRIFIABLE du livrable.
+
+| ✅ PREUVE ATOMIQUE (accepté) | ❌ PREUVE CIRCULAIRE (refusé, retraite en ❌) |
+|------------------------------|------------------------------------------------|
+| "vérifié slide 7 : '4,5%' bien en orange #E9540D, gras (capture qa-slides/slide-07.jpg)" | "preuve = confirmé bloc F" |
+| "ligne 234 du script : `fontFace: 'Poppins SemiBold'`" | "preuve = voir bloc T sur voix vous" |
+| `grep -c "—" build.js` → 0 | "preuve = règle §2.2 appliquée" |
+| "comptage : 12 slides standard sur 17 contiennent 'vous' = 70,6% (seuil 70% respecté)" | "preuve = voix vous OK partout" |
+
+**Règle de quantification** : pour toute règle quantifiable (voix "vous", em-dashes, ratio dataviz, couverture brouillon, proportions actes Duarte), exiger un **comptage chiffré explicite** dans la preuve. Pas de "✅ règle respectée" sans chiffre.
 
 ---
 
@@ -13,11 +39,12 @@
 
 1. **À chaque génération**, créer un fichier `qa-rapport-<nom-pres>.md` à côté du `.pptx`
 2. **Copier-coller cette checklist** dans le rapport
-3. **Pour chaque item**, statuer `✅` ou `❌` après contrôle réel (pas déclaratif)
-4. **Pour les ❌**, justifier : raison + impact + arbitrage utilisateur
-5. **Joindre le rapport** à la livraison du `.pptx`
+3. **Lancer le sous-agent QA indépendant** avec le mandat de CLAUDE.md §0 Étape 8
+4. Le sous-agent statue `✅` ou `❌` avec preuve atomique pour chaque ✅
+5. **Lancer le sous-agent Devil's advocate** (Étape 8.5) qui challenge toutes les preuves
+6. **Joindre les 2 rapports** (sous-agent QA + Devil's advocate) à la livraison du `.pptx`
 
-Score cible : **100% ✅** sur les blocs "non négociable", **≥ 90% ✅** sur les blocs "qualité".
+Score cible : **100% ✅** sur les blocs "non négociable" (incluant Y, Z, AA, BB, CC), **≥ 90% ✅** sur les blocs "qualité".
 
 ---
 
@@ -403,6 +430,88 @@ VOIE 3 (Python matplotlib → PNG) — règles spécifiques
     → Verdict Duarte X/9 documenté dans le rapport QA
 ```
 
+## AA. SLIDE COVER §3.5 — non négociable (décomposé item par item)
+
+> Bloc créé suite à l'audit "Angora vs Sphinx v2" : la cover ne respectait que partiellement le template §3.5 (logo Empirik supprimé unilatéralement par l'agent, sans demande utilisateur). Chaque élément du template est désormais un item séparé pour empêcher la suppression silencieuse.
+
+```
+[ ] Logo Empirik présent en haut à gauche (taille ~1.5" × 0.5", obligatoire et non négociable
+    → Preuve : "slide 1, coin haut-gauche, x=0.4 y=0.3 w=1.5 h=0.5"
+[ ] Logo client présent en haut à droite SI pres pour un client (sinon laisser vide à droite)
+    → Preuve : "slide 1, coin haut-droit"
+[ ] Ligne horizontale fine de séparation sous les logos (gris #E5E5E5, hauteur ~0.015")
+    → Preuve : "slide 1, y=0.95"
+[ ] Image d'ambiance côté gauche (~50% largeur, hauteur pleine, bords carrés)
+    → Preuve : "addImage path=assets/cover-xxx.png x=0.4 y=1.15 w=4.6 h=4.0"
+[ ] Titre principal côté droit : Poppins Bold 48-60pt, orange #E9540D, aligné gauche, 1-2 lignes
+    → Preuve : "ligne L du script : fontSize 48-60, color E9540D, fontFace 'Poppins Bold'"
+[ ] Petit trait orange horizontal sous le titre (largeur ~0.6", épaisseur ~0.05")
+    → Preuve : "ligne L : shape rect orange sous titre"
+[ ] Sous-titre Poppins Regular ~20pt, bleu #0A3856
+    → Preuve : "ligne L : fontSize 20, color 0A3856, fontFace 'Poppins'"
+[ ] Date Poppins Bold ~20pt, bleu #0A3856 (format "Mai 2026", pas "05/2026")
+    → Preuve : "ligne L : fontSize 20, bold true, format date conforme"
+[ ] Motif décoratif jaune #FCC02D en bas (petite grille de carrés, entre image et bloc texte)
+    → Preuve : "boucle for shapes jaune visible slide 1"
+```
+
+## BB. VOIX "VOUS" QUANTIFIÉE — non négociable (≥ 70% des slides standard)
+
+> Bloc créé suite au bug "Angora v2" : 4 slides sur 24 contenaient "vous" mais coché ✅ "voix vous appliquée partout". Sans seuil chiffré + auto-test, la règle est qualitative et permet le glissement silencieux.
+
+```
+[ ] Comptage explicite des slides standard (hors cover, section dividers, citation pure, CTA)
+    → Preuve : "Total slides standard = X (= total slides - cover - N dividers - CTA)"
+
+[ ] Pour chaque slide standard, présence d'au moins UNE occurrence de "vous" / "votre" / "vos"
+    dans le titre OU le corps
+    → Preuve : tableau exhaustif slide N → contient "vous" ? oui/non
+
+[ ] Comptage final : N slides avec "vous" / Total slides standard = X%
+    → Preuve atomique attendue : "grep -ciE '\\b(vous|votre|vos)\\b' build_xxx.js → résultat"
+    → Comparer au nombre de slides standard
+
+[ ] Seuil minimal respecté : X% ≥ 70%
+    → Si < 70% → ❌ obligatoire, à corriger AVANT livraison
+    → Reformulation de la 3e personne ("le client", "le propriétaire") vers la 2e ("vous")
+
+[ ] Aucune occurrence de "nous" en dehors de "Nous recommandons" sur la slide reco unique finale
+    → Preuve : grep -ciE '\\bnous\\b' build_xxx.js → comptage
+    → Préférer "Adoptez..." / "Choisissez..." même sur la slide reco
+
+[ ] L'audience-héros est nommée dans la pres (cf §3.5 Artifact 6 g)
+    → Preuve : citation slide précise qui nomme la persona
+```
+
+## CC. ASSETS VISUELS DESIGN_EMPIRIK — non négociable (cover, sections, closing)
+
+> Bloc créé suite au bug "Angora v2" : section dividers limités à "fond bleu + texte" sans image conceptuelle. DESIGN_EMPIRIK.md liste 7 types d'assets visuels obligatoires — sans bloc dédié, ils étaient zappés silencieusement.
+
+```
+[ ] Slide cover : image générée via scripts/generate_image.py --type cover OU image fournie
+    → Preuve : "addImage path=assets/cover-xxx.png présent slide 1"
+    → ❌ si pas d'image (juste shapes / fond uni)
+
+[ ] Slide(s) de section divider : image conceptuelle OU élément visuel fort (pas juste fond bleu + texte)
+    → Preuve : pour chaque divider, citer l'élément visuel ou l'image utilisée
+    → ❌ si tous les dividers sont fond bleu + texte uniquement
+
+[ ] Slide CTA / closing : élément visuel fort (poster pattern, fond gradient, image conceptuelle)
+    → Preuve : description visuelle de la slide finale
+    → ❌ si juste texte + bouton sans élément visuel marquant
+
+[ ] Slides "chiffre clé seul" enrichies (cf bloc Y) : icône / mini-viz / image conceptuelle
+    en accompagnement du chiffre
+    → Preuve : pour chaque slide chiffre clé, citer l'élément d'accompagnement
+
+[ ] Aucune slide texte-only (règle §3.6) : chaque slide a au moins UN élément visuel
+    → Preuve : tableau exhaustif slide N → élément visuel présent ? quel type ?
+
+[ ] Couleurs des assets respectent palette Empirik (cf §3.1) — pas de couleur hors charte
+    sans justification métier écrite
+    → Preuve : palette utilisée listée par asset
+```
+
 ## X. LIVRAISON
 
 ```
@@ -426,7 +535,7 @@ VOIE 3 (Python matplotlib → PNG) — règles spécifiques
 
 ## Score final
 
-- Blocs non négociables (A, B, C, D, E, F, H, J, K, L, P, R, S, T, U, W, Y, Z) : **__ / __ ✅**
+- Blocs non négociables (A, B, C, D, E, F, H, J, K, L, P, R, S, T, U, W, Y, Z, AA, BB, CC) : **__ / __ ✅**
 - Blocs qualité (G, I, M, N, O, Q, V) : **__ / __ ✅**
 - Nombre de ✅ avec preuve concrète : **__ / __ ✅** (cibler 100%)
 - Nombre de ❓ "non vérifié" : **__** (cibler 0)
