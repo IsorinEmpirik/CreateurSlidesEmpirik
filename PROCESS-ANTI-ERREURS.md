@@ -332,6 +332,64 @@ Tous les textes (axes, étiquettes de séries, annotations, valeurs en bout de l
    - Place chaque texte via `addText()` aux coordonnées calculées (en fonction de `x/y/w/h` de l'image)
 3. Résultat : tous les libellés sont des `<txBody>` PptxGenJS = éditables dans PowerPoint / Google Slides
 
+### Erreur #12 — Défense préventive d'encodage (substitution accents par ASCII)
+
+**❌ Symptôme** : l'agent producteur, par prudence "au cas où l'encodage casserait", écrit `chiffrees` au lieu de `chiffrées`, `defense` au lieu de `défense`, `genere` au lieu de `généré`. Plusieurs passes de correction sont alors nécessaires pour rétablir les accents — coût observé : ~15 min de boucles de fix par génération.
+
+**✅ Règle absolue** :
+- L'environnement de génération Empirik est **UTF-8 garanti de bout en bout** : fichiers `.js` PptxGenJS, scripts Python `generate_*.py`, exports PPTX, conversions PDF/JPG, rapport QA.
+- **Écrire les accents directement** : `chiffrées`, `généré`, `défense`, `cœur`, `à`, `où`, `dès`, `très`. Pas de substitution préventive.
+- **La "fix-up post-génération" des accents est INTERDITE** : si on doit corriger des accents après coup, c'est qu'on a commis cette erreur en amont.
+
+**Quand la défense préventive est tolérée** (cas rares) :
+- Fichier consommé par un outil externe avec encodage cassé connu et documenté (ex : un legacy CSV uploadé sur un système Latin-1). Dans ce cas, signaler explicitement l'exception dans un commentaire de code.
+- Hors de cette exception, par défaut **écrire en UTF-8 propre, point**.
+
+**Test de vérification** après génération :
+```bash
+python -m markitdown <fichier.pptx> | grep -cE "[éèêàùôîûœç]"
+# Doit être > 0 sur une pres en français. Si = 0 → l'agent a substitué.
+```
+
+### Erreur #13 — Logos placeholders non vérifiés visuellement
+
+**❌ Symptôme** : un PNG existe déjà dans `assets/logos/` (cache d'une session antérieure), l'agent producteur l'utilise sans ouvrir le fichier pour vérifier qu'il correspond à la marque. Résultat : intégration silencieuse d'un placeholder texte, d'un logo obsolète (version retirée), ou d'un logo erroné (mauvaise marque). L'erreur n'est découverte qu'à la livraison.
+
+**✅ Règle de QA visuelle pre-flight obligatoire** : avant d'intégrer un logo via `slide.addImage()`, **ouvrir le PNG dans le Read tool** (Claude est multimodal) et confirmer visuellement :
+1. Le logo correspond bien à la **marque réelle** (pas un placeholder texte, pas une autre marque)
+2. C'est la **version actuelle** du logo (pas une version obsolète retirée par la marque)
+3. Le format est exploitable (vrai PNG ≥ 1 KB, pas un fichier corrompu)
+
+Si l'un des 3 critères échoue → relancer `fetch_logos.py --auto` ou méthodes manuelles §2.6 sur cette marque **AVANT** la première ligne de code PptxGenJS qui l'utilise.
+
+#### Refresh forcé des logos LLM / IA en début de session
+
+Les marques d'IA génératives **évoluent vite** : Claude a eu 3 versions de logo en 18 mois, Gemini en a eu 2, ChatGPT en a eu 2. Un PNG en cache de > 3 mois est probablement obsolète.
+
+**Règle automatique** : pour les marques de la liste ci-dessous, **toujours regénérer le logo en début de session** (même si le cache existe) :
+- `ChatGPT` / `OpenAI`
+- `Claude` / `Anthropic`
+- `Gemini` / `Bard` / `Google AI`
+- `Perplexity`
+- `Mistral`
+- `Copilot` / `Microsoft Copilot`
+- `Grok` / `xAI`
+- `DeepSeek`
+- Toute autre marque LLM/IA récente
+
+Commande type à lancer en pre-flight :
+```bash
+python scripts/fetch_logos.py --auto \
+  "openai=chatgpt" "anthropic=claude" "googlegemini=gemini" \
+  "perplexity=perplexity" "mistral=mistral"
+```
+
+Vérifier ensuite chaque PNG via Read tool comme le demande la règle ci-dessus.
+
+#### Audit périodique de `assets/logos/`
+
+Tous les 3 mois ou avant une grosse pres avec beaucoup de logos cités : sweep complet du dossier `assets/logos/` pour identifier les placeholders / obsolètes et les regénérer. Pas optionnel pour les marques IA, recommandé pour les marques B2B classiques.
+
 ---
 
 ## 📋 CHECKLIST QA FINALE (à exécuter avant de livrer)

@@ -25,12 +25,18 @@ Si ces 4 infos ne sont pas dans le message courant, **demande-les explicitement 
 
 Crée et lance un workflow dynamique (`ultracode`) qui orchestre les phases suivantes. **Le workflow doit générer des sous-agents avec contextes isolés** pour empêcher l'auto-validation.
 
-### Phase 1 — Lecture des guides + Rapport d'actions tactiques (1 sous-agent)
+### Phase 1 — Lecture allégée des guides + Rapport d'actions tactiques (1 sous-agent)
+
+**Optimisation perf** : ce sous-agent (et tous ceux des phases suivantes) reçoit en contexte injecté le fichier **`CONTEXTE-SOUS-AGENTS.md`** (~500 lignes, vs 1700+ pour CLAUDE.md). Ce contexte condensé couvre 95% des décisions. Le sous-agent ne consulte les guides complets QUE si une règle floue ou non couverte le bloque (auto-référence dans CONTEXTE-SOUS-AGENTS.md §8).
+
 Sous-agent qui :
-- Lit dans l'ordre `CLAUDE.md`, `PROCESS-ANTI-ERREURS.md`, `MASTER-CHECKLIST.md`, `guide_design_slides.md`, `guide-slides-data-storytelling.md`, `guide_storytelling_presentations.md`, `dataviz-guide.md`, `DESIGN_EMPIRIK.md`
-- Produit le **rapport de lecture en 5 ACTIONS TACTIQUES par guide** (format CLAUDE.md §0 Étape 1, pas un résumé théorique)
-- Detecte si le sujet est data-driven → drapeau Pathos + propose 3 contre-poisons (CLAUDE.md §0 Étape 2)
-- Retourne : rapport actions + drapeau Pathos + contre-poison proposé
+- Lit `CONTEXTE-SOUS-AGENTS.md` (référence opérationnelle condensée)
+- Lit `MASTER-CHECKLIST.md` (instrument du rapport QA final)
+- Consulte ponctuellement les guides complets uniquement si nécessaire (`CLAUDE.md`, `PROCESS-ANTI-ERREURS.md`, `guide_design_slides.md`, `guide-slides-data-storytelling.md`, `guide_storytelling_presentations.md`, `dataviz-guide.md`, `DESIGN_EMPIRIK.md`)
+- Produit le **rapport de lecture en 5 ACTIONS TACTIQUES par fichier consulté** (format CLAUDE.md §0 Étape 1, pas un résumé théorique)
+- Détecte si le sujet est data-driven → drapeau Pathos + propose 3 contre-poisons (CLAUDE.md §0 Étape 2)
+- **Refresh logos LLM en pre-flight** : si la pres cite des LLMs/IA (ChatGPT, Claude, Gemini, Perplexity, Mistral, Copilot, Grok, DeepSeek, Llama, Cohere), lance `scripts/fetch_logos.py --auto` sur ces marques même si le cache existe (cf CLAUDE.md §2.6)
+- Retourne : rapport actions + drapeau Pathos + contre-poison proposé + logos LLM rafraîchis
 
 ### Phase 2 — Validation utilisateur (humain dans la boucle)
 Affiche le rapport de Phase 1 + 2-3 angles narratifs proposés (CLAUDE.md §0 Étape 2). **Attend la validation explicite de l'utilisateur** sur (a) l'angle choisi (b) le contre-poison Pathos. Pas de progression sans validation.
@@ -57,11 +63,14 @@ Affiche le plan + les 6 artifacts. **Attend "go" explicite de l'utilisateur**. P
 
 ### Phase 6 — Génération PPTX (1 agent producteur)
 Agent qui :
-- Pre-flight : liste les marques/outils → lance `scripts/fetch_logos.py --auto` pour les manquants
+- Pre-flight 1 : liste les marques/outils → lance `scripts/fetch_logos.py --auto` pour les manquants
+- Pre-flight 2 : **QA visuelle de chaque logo** via Read tool (vérifier marque réelle + version actuelle + format exploitable, cf CLAUDE.md §2.6 + PROCESS-ANTI-ERREURS Erreur #13). Si placeholder / obsolète / erroné détecté → re-fetch avant intégration
 - Génère le script `build_<nom-pres>.js` selon la charte (CLAUDE.md §3 et §6)
 - Pour chaque graphe Voie 3 : lance `scripts/generate_chart.py` (PNG sans texte + JSON overlays)
+- **Encodage UTF-8 strict** : écrire les accents directement (`chiffrées`, `généré`, `défense`). AUCUNE substitution préventive par ASCII. L'environnement est UTF-8 garanti (cf PROCESS-ANTI-ERREURS Erreur #12). La "fix-up post-génération" des accents est interdite et signale une erreur d'amont.
 - Compile en `.pptx` via `node build_<nom-pres>.js`
 - Convertit en PDF via LibreOffice puis en JPG via PyMuPDF (1 par slide)
+- Test final : `python -m markitdown build_<nom-pres>.pptx | grep -cE "[éèêàùôîûœç]"` doit être > 0 (sinon l'agent a substitué les accents)
 
 ### Phase 7 — Panel parallèle de 3 sous-agents indépendants
 **Lancer en PARALLÈLE** (pattern fan-out-and-synthesize) :
@@ -75,20 +84,23 @@ Mission : audite la pres sur les 9 critères Duarte (S.T.A.R., humanisation chif
 **Sous-agent C — Conformité technique PptxGenJS**
 Mission : vérifie le script source. fontFace variant (pas fontWeight), aucun `toUpperCase()`, aucun `charSpacing` sur eyebrows, `grep -c "—"` = 0, aucun jaune sur blanc, alignement strict, marges 60px, PNG sans texte pour graphes Voie 3.
 
-### Phase 8 — Rapport QA par sous-agent QA INDÉPENDANT (1 sous-agent dédié)
-Sous-agent G avec **mandat strict devil's advocate** :
-> "Tu es l'auditeur indépendant du livrable. Voici MASTER-CHECKLIST.md (~170 items) et tous les outputs des Phases 1-7. Par défaut chaque bloc est ❌. Pour passer en ✅, il faut une PREUVE ATOMIQUE (citation directe + référence slide N ou ligne L du script). Preuves circulaires (pointe vers un autre ✅) = NULLES, retraite en ❌. Pour règles quantifiables (voix vous, em-dashes, ratio dataviz, proportions actes), exiger comptage chiffré dans la preuve."
+### Phase 8 — Rapport QA double-passe par sous-agent QA INDÉPENDANT (fusion 8 + 8.5)
+
+**Sous-agent QA unique avec mandat double-passe interne** (gain perf : ~4 min vs 2 sous-agents séquentiels) :
+
+> "Tu es l'auditeur indépendant du livrable. Voici MASTER-CHECKLIST.md (~170 items) et tous les outputs des Phases 1-7.
+>
+> **Passe 1 — Audit initial** : par défaut chaque bloc est ❌. Pour passer en ✅, il faut une PREUVE ATOMIQUE (citation directe + référence slide N ou ligne L du script). Pour règles quantifiables (voix vous, em-dashes, ratio dataviz, proportions actes), exiger comptage chiffré dans la preuve.
+>
+> **Passe 2 — Devil's advocate interne** (immédiatement après la passe 1, dans le même contexte) : reprends chaque ✅ que tu viens d'attribuer et challenge-le. Si la preuve est circulaire (pointe vers un autre ✅), absente, ou non quantifiée sur règle quantifiable → retraite en ❌. Focus prioritaire sur les blocs historiquement laxistes : BB (voix vous), Artifact 1 (couverture brouillon), F (contraste stratégique), U (exhaustivité), Z (Duarte).
+>
+> **Verdict final** : pour chaque ✅, double validation (passe 1 atomique + passe 2 challengée). Pour chaque ❌, justification + impact + correction proposée.
+>
+> Si > 3 ✅ retraités en ❌ lors de la passe 2 → le rapport QA est REJETÉ, retour à Phase 6 avec corrections obligatoires (max 2 itérations producteur ↔ auditeur)."
 
 L'agent producteur n'a PAS le droit de cocher ✅ lui-même.
 
-### Phase 8.5 — Devil's advocate post-rapport (1 sous-agent dédié)
-Sous-agent H qui **challenge toutes les preuves** du rapport produit en Phase 8 :
-- Preuves circulaires → retraite en ❌
-- Preuves non quantifiées (sur règles quantifiables) → retraite en ❌
-- Preuves absentes → retraite en ❌
-- Focus prioritaire : Bloc BB (voix vous), Artifact 1 (couverture brouillon), Bloc F (contraste stratégique), Bloc U (exhaustivité), Bloc Z (Duarte)
-
-Si > 3 retraitements → le rapport QA est REJETÉ, retour à Phase 6 avec corrections.
+**Pourquoi fusion** : 2 sous-agents séquentiels (audit puis devil's advocate) consommaient ~14 min cumulés alors que la passe 2 est essentiellement une relecture critique du résultat de la passe 1. Un seul sous-agent avec mandat double-passe explicite obtient le même niveau de rigueur en ~10 min, avec le bénéfice supplémentaire d'un contexte continu (la passe 2 connaît directement les preuves de la passe 1, sans re-relecture).
 
 ### Phase 9 — Livraison
 Produire :

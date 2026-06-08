@@ -615,6 +615,37 @@ Détails complets et cas limites (403 Forbidden persistant, SSL fail, slugs intr
 
 **Astuce pratique** : pour le scraping du site officiel, télécharger le HTML complet (`curl -L`) et chercher avec `grep -oE 'src="[^"]*logo[^"]*\.(svg|png)"'` ou inspecter visuellement avec un agent multimodal. La balise `<img>` qui affiche le logo dans le header de la home **existe presque toujours**.
 
+#### ⛔ QA visuelle pre-flight OBLIGATOIRE de chaque logo avant intégration
+
+Avant d'intégrer un logo via `slide.addImage()`, **ouvrir le PNG dans le Read tool** (Claude est multimodal) et confirmer visuellement les 3 critères :
+
+1. **Identité correcte** : le logo correspond bien à la marque réelle (pas un placeholder texte, pas une autre marque par confusion de slug)
+2. **Version actuelle** : c'est la version actuelle du logo (pas une version retirée par la marque depuis)
+3. **Format exploitable** : vrai PNG ≥ 1 KB, fond transparent, pas un fichier corrompu
+
+Si l'un des 3 critères échoue → **relancer `fetch_logos.py --auto`** ou les méthodes manuelles d'escalade ci-dessus sur cette marque, AVANT la première ligne de code PptxGenJS qui l'utilise. Ne JAMAIS intégrer un logo "à l'aveugle" parce que le fichier existe dans `assets/logos/` — un fichier en cache d'une session précédente peut être un placeholder oublié ou une version obsolète.
+
+#### Refresh forcé des logos LLM / IA en début de session
+
+Les marques d'IA génératives évoluent vite (Claude a eu 3 versions de logo en 18 mois, Gemini en a eu 2, ChatGPT en a eu 2). Un PNG en cache de plus de 3 mois est probablement obsolète.
+
+**Règle automatique** : pour chacune des marques de la liste ci-dessous, **toujours regénérer le logo en début de session** (même si le cache `assets/logos/` existe), puis appliquer la QA visuelle pre-flight ci-dessus :
+
+```
+ChatGPT / OpenAI · Claude / Anthropic · Gemini / Bard / Google AI ·
+Perplexity · Mistral · Copilot / Microsoft Copilot · Grok / xAI ·
+DeepSeek · Llama / Meta AI · Cohere · Pi / Inflection
+```
+
+Commande type à lancer en pre-flight si une pres cite des LLMs :
+```bash
+python scripts/fetch_logos.py --auto \
+  "openai=chatgpt" "anthropic=claude" "googlegemini=gemini" \
+  "perplexity=perplexity" "mistral=mistral"
+```
+
+Pour les marques B2B classiques (concurrents sectoriels, médias, plateformes établies), le cache est généralement OK mais la QA visuelle reste obligatoire.
+
 ### 2.7 Titres de slides — constats concrets, pas étiquettes
 - **Constat, pas étiquette** : "Un score insuffisant pour atteindre une top position" au lieu de "Score de qualité de la page"
 - **Nommer précisément** : "L'expertise, l'originalité et l'effort doivent être retravaillés" au lieu de "Les 3 critères les plus faibles"
@@ -1391,6 +1422,46 @@ Structure narrative minimum pour tout deck data, complémentaire à Acte 1 / 2 /
 **Exception** : rapport d'analyse pure pour comité technique interne (audit, restitution data brute). Dans ce cas, Pathos peut être < 20% — mais l'utilisateur doit l'avoir explicitement demandé en mode "rapport" et non "présentation".
 
 **Pourquoi cette règle est ici et pas implicite** : la pres "Angora vs Sphinx" v1 a obtenu 100% sur la checklist factuelle Empirik (charte, dataviz, exhaustivité, sources) mais 55% sur Duarte (zéro S.T.A.R., chiffres froids, structure 100% piliers sans sparkline, big idea sèche). Preuve que **sans règle explicite Pathos**, le Claude exécute par défaut un audit McKinsey rigoureux mais émotionnellement plat.
+
+### 5.6 Nouvelle félicité (et tout paragraphe narratif) — règle de mise en forme
+
+**Principe** : un paragraphe narratif Duarte (slide "nouvelle félicité", anecdote d'ouverture, projection émotionnelle) doit rester **narratif** dans le ton, mais sa **mise en page reste éditoriale** — pas un bloc oraliste indifférencié.
+
+**Règle quantifiée** : tout paragraphe narratif sur une slide ne doit JAMAIS être un pavé > 60 mots monobloc. Au-delà, le ton oral mal transposé à l'écrit étouffe le message. Un lecteur scanne, il ne lit pas un monologue.
+
+**Si le paragraphe dépasse 60 mots, le découper en 3 moments visuels** (structure ouverture / pivot / résolution) :
+
+1. **Moment 1 — Ouverture (le décor)** : 1 phrase qui plante le contexte ou le dialogue d'entrée
+2. **Moment 2 — Pivot (la révélation factuelle)** : 1 phrase + 3-4 chiffres-ancres en bullet ou liste compacte
+3. **Moment 3 — Résolution (le verdict émotionnel)** : 1 phrase qui scelle le futur transformé
+
+Chaque moment occupe son propre bloc visuel sur la slide, avec espace blanc entre eux. Le ton reste narratif (tu peux garder dialogues, métaphores, projections), la mise en page devient lisible en 5 secondes au lieu de 30.
+
+**Exemple générique de structure** :
+
+```
+[ Slide nouvelle félicité ]
+
+Moment 1 (ouverture) :
+  Septembre prochain, salle de réunion.
+  [Le décideur] : "Et nos chiffres clés ?"
+
+Moment 2 (pivot avec ancrage chiffré) :
+  Cette fois, [le héros de la pres] ne montre plus une courbe rouge.
+  Il montre :
+   ▸ [chiffre 1]
+   ▸ [chiffre 2]
+   ▸ [chiffre 3]
+   ▸ [chiffre 4]
+
+Moment 3 (résolution émotionnelle) :
+  [Le décideur] ne demande plus pourquoi.
+  Il demande comment scaler.
+```
+
+**Anti-pattern à proscrire** : "Imaginez, dans X mois, votre [audience] [verbe] [bénéfice 1], [verbe] [bénéfice 2], [verbe] [bénéfice 3], et grâce à ça [conclusion]…" en un seul bloc italique centré. C'est le ton d'un oral mal traduit en slide. Le lecteur écrit décroche.
+
+**Règle d'or** : si tu hésites à structurer ou pas, structure. Une narration en 3 moments visuels reste émotionnelle ET devient scannable. Une narration monobloc perd les deux.
 
 ---
 

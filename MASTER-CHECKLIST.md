@@ -105,6 +105,11 @@ Score cible : **100% ✅** sur les blocs "non négociable" (incluant Y, Z, AA, B
 [ ] Texte courant : Poppins Regular 14pt aligné gauche bleu Empirik
 [ ] Chiffres clés : Poppins Bold 48-72pt centré orange Empirik
 [ ] Aucun texte < 12pt (sauf footer notes 9-10pt tolérées)
+
+[ ] ENCODAGE UTF-8 strict : accents écrits directement, aucune substitution par ASCII
+    → Auto-test : `python -m markitdown build_xxx.pptx | grep -cE "[éèêàùôîûœç]"` doit être > 0
+    → Si = 0 sur pres française → l'agent a substitué "chiffrées" par "chiffrees", défaut bloquant
+    → Cf PROCESS-ANTI-ERREURS Erreur #12
 ```
 
 ## E. PALETTE COULEURS — non négociable (CLAUDE.md §3.1, §4.8)
@@ -257,6 +262,19 @@ Score cible : **100% ✅** sur les blocs "non négociable" (incluant Y, Z, AA, B
 [ ] Logos téléchargés via scripts/fetch_logos.py (4 couches : simpleicons → Wikipedia → scraping HTML multi-pages → brandfetch.com)
     → Mode --auto recommandé : essaie les 4 couches en cascade jusqu'à trouver
 [ ] PNG transparents 30-60px de haut, version adaptée au fond (couleur sur blanc, blanc sur bleu Empirik)
+
+[ ] QA VISUELLE PRE-FLIGHT de chaque logo avant intégration via slide.addImage()
+    → Ouvrir CHAQUE PNG dans le Read tool (Claude multimodal)
+    → Vérifier (a) marque correcte (pas placeholder texte / pas autre marque)
+                (b) version actuelle (pas obsolète)
+                (c) format exploitable (vrai PNG ≥ 1 KB, fond transparent)
+    → Si échec sur un critère → re-fetch AVANT première ligne addImage()
+    → Cf PROCESS-ANTI-ERREURS Erreur #13
+
+[ ] REFRESH FORCÉ des logos LLM en début de session (PNG cache > 3 mois souvent obsolète)
+    → ChatGPT/OpenAI, Claude/Anthropic, Gemini/Google AI, Perplexity, Mistral, Copilot, Grok, DeepSeek, Llama, Cohere
+    → Commande type : `python scripts/fetch_logos.py --auto "openai=chatgpt" "anthropic=claude" "googlegemini=gemini" ...`
+    → Suivi de la QA visuelle pre-flight ci-dessus
 [ ] Aucun logo abandonné silencieusement
     → Si une marque a posé problème, les 10 méthodes d'escalade documentées ci-dessous ont été tentées
     avant d'envisager une absence de logo (et l'absence est documentée dans le rapport, pas omise)
@@ -403,7 +421,14 @@ VOIE 3 (Python matplotlib → PNG) — règles spécifiques
 
 [ ] Slide "nouvelle félicité" présente entre la reco et le CTA final
     → Projection narrative du futur transformé (pas une liste de bénéfices en cartes)
-    → Ex : "Imaginez, en juin 2041, votre Angora a 15 ans..."
+    → Ex : "Imaginez, dans X mois, votre [audience]..."
+
+[ ] Slide nouvelle félicité (et tout paragraphe narratif) STRUCTURÉE en 3 moments visuels si > 60 mots
+    → Pas de pavé monobloc indifférencié (ton oraliste mal traduit à l'écrit)
+    → Structure : moment 1 ouverture (1 phrase) + moment 2 pivot avec ancrage chiffré (1 phrase + 3-4 bullets)
+                  + moment 3 résolution émotionnelle (1 phrase)
+    → Espaces blancs entre les moments, lisible en 5 secondes
+    → Cf CLAUDE.md §5.6
 
 [ ] Big idea formulée avec ENJEUX gain ET perte (pas juste verdict sec)
     → ❌ "L'Angora l'emporte sur le Sphinx"
