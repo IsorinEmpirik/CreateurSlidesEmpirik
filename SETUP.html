@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Setup — Créateur de Slides Empirik</title>
+<style>
+  :root {
+    --blue: #0A3856;
+    --orange: #E9540D;
+    --yellow: #FCC02D;
+    --bg: #FFFFFF;
+    --grey-soft: #F5F5F5;
+    --grey-text: #4A5A6A;
+    --grey-border: #E0E4E8;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: var(--blue); background: var(--bg); }
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; }
+  header { border-bottom: 1px solid var(--grey-border); padding-bottom: 24px; margin-bottom: 32px; }
+  header .eyebrow { color: var(--orange); font-weight: 300; font-size: 13px; letter-spacing: 0.5px; }
+  header h1 { font-size: 36px; font-weight: 600; margin: 8px 0 4px; line-height: 1.15; }
+  header .baseline { color: var(--grey-text); font-size: 16px; margin: 0; }
+  header .accent-bar { display: inline-block; width: 48px; height: 3px; background: var(--orange); margin-top: 16px; }
+
+  h2 { font-size: 24px; font-weight: 600; margin: 48px 0 12px; padding-top: 16px; border-top: 1px solid var(--grey-border); }
+  h2 .num { color: var(--orange); font-weight: 600; margin-right: 8px; }
+  h3 { font-size: 18px; font-weight: 600; margin: 28px 0 8px; color: var(--blue); }
+  h4 { font-size: 15px; font-weight: 600; margin: 16px 0 6px; color: var(--blue); }
+  p { line-height: 1.55; margin: 8px 0; }
+  ul { line-height: 1.55; padding-left: 22px; }
+
+  .lead { background: #FFF7EF; border-left: 4px solid var(--orange); padding: 16px 20px; border-radius: 6px; margin: 16px 0 32px; }
+  .lead strong { color: var(--orange); }
+
+  .note { background: var(--grey-soft); border-left: 3px solid var(--blue); padding: 12px 16px; border-radius: 4px; margin: 12px 0; font-size: 14px; }
+  .warning { background: #FFF4E5; border-left: 3px solid var(--orange); padding: 12px 16px; border-radius: 4px; margin: 12px 0; font-size: 14px; }
+  .warning strong { color: var(--orange); }
+
+  .critical { background: #FDECEA; border: 2px solid #D32F2F; border-radius: 8px; padding: 18px 22px; margin: 24px 0; font-size: 15px; box-shadow: 0 2px 6px rgba(211,47,47,0.15); }
+  .critical .critical-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .critical .critical-badge { background: #D32F2F; color: white; font-weight: 700; padding: 3px 12px; border-radius: 4px; font-size: 12px; letter-spacing: 0.5px; }
+  .critical .critical-title { font-size: 17px; font-weight: 700; color: #B71C1C; margin: 0; }
+  .critical p { margin: 8px 0; color: #4A1A1A; }
+  .critical ul { color: #4A1A1A; }
+  .critical strong { color: #B71C1C; }
+  .critical code { background: #FAD8D2; color: #B71C1C; }
+
+  .step { background: #F9FAFB; border: 1px solid var(--grey-border); border-radius: 8px; padding: 20px 24px; margin: 16px 0; }
+  .step-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+  .step-num { background: var(--orange); color: white; font-weight: 600; font-size: 13px; padding: 3px 9px; border-radius: 4px; flex-shrink: 0; }
+  .step-title { font-size: 17px; font-weight: 600; margin: 0; color: var(--blue); }
+
+  .why { font-size: 14px; color: var(--grey-text); margin: 6px 0 10px; font-style: italic; }
+
+  .code-block { position: relative; background: #1F2A37; color: #E8ECF1; padding: 14px 56px 14px 16px; border-radius: 6px; font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace; font-size: 13px; line-height: 1.5; overflow-x: auto; margin: 10px 0; }
+  .code-block .copy-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #E8ECF1; padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; font-family: inherit; }
+  .code-block .copy-btn:hover { background: var(--orange); border-color: var(--orange); }
+  .code-block .copy-btn.copied { background: #10A050; border-color: #10A050; }
+
+  .prompt-block { background: #FFF7EF; border: 1px solid #FCC4A4; border-radius: 6px; padding: 14px 56px 14px 16px; margin: 10px 0; position: relative; }
+  .prompt-block .label { display: inline-block; background: var(--orange); color: white; font-size: 11px; padding: 2px 8px; border-radius: 3px; font-weight: 600; margin-bottom: 6px; }
+  .prompt-block .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--blue); font-size: 14px; line-height: 1.5; }
+  .prompt-block .copy-btn { position: absolute; top: 12px; right: 12px; background: var(--orange); color: white; border: none; padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .prompt-block .copy-btn:hover { background: #C84908; }
+  .prompt-block .copy-btn.copied { background: #10A050; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  table th { text-align: left; background: var(--grey-soft); color: var(--blue); font-weight: 600; padding: 10px 12px; border-bottom: 2px solid var(--grey-border); }
+  table td { padding: 8px 12px; border-bottom: 1px solid var(--grey-border); }
+  table code { background: var(--grey-soft); padding: 2px 6px; border-radius: 3px; font-size: 13px; }
+
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+  .tag-os { background: var(--blue); color: white; }
+  .tag-required { background: var(--orange); color: white; }
+  .tag-optional { background: var(--grey-text); color: white; }
+
+  code { background: var(--grey-soft); padding: 2px 6px; border-radius: 3px; font-size: 13px; font-family: "SF Mono", Consolas, monospace; }
+
+  .checklist { background: #F0F8F1; border-left: 4px solid #10A050; padding: 16px 20px; border-radius: 6px; margin: 24px 0; }
+  .checklist h4 { margin-top: 0; color: #0A6030; }
+  .checklist ul { padding-left: 20px; }
+  .checklist li { margin: 4px 0; }
+
+  .footer { text-align: center; color: var(--grey-text); font-size: 13px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--grey-border); }
+
+  .yellow-pattern { display: inline-block; }
+  .yellow-pattern span { display: inline-block; width: 6px; height: 6px; background: var(--yellow); margin: 0 1px; vertical-align: middle; }
+
+  details { margin: 12px 0; }
+  details summary { cursor: pointer; font-weight: 600; color: var(--blue); padding: 8px 0; }
+  details summary:hover { color: var(--orange); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="eyebrow">Empirik · better with data</div>
+    <h1>Setup — Créateur de Slides x Storytelling</h1>
+    <p class="baseline">Tout ce qu'il faut installer et configurer avant de générer ta première présentation.</p>
+    <div class="accent-bar"></div>
+  </header>
+
+  <div class="lead">
+    <strong>Comment utiliser ce guide.</strong> On part du principe que tu as déjà Claude Code (extension VS Code) et que tu as ouvert ce dossier dedans. À partir de là, presque tout s'installe automatiquement via les prompts ci-dessous. Tu copies, tu colles dans Claude Code, et il vérifie + installe ce qui manque sans que tu aies à toucher au terminal.
+  </div>
+
+  <!-- ============================== -->
+  <h2><span class="num">1.</span> Avant de commencer</h2>
+
+  <p>Tu as reçu ce dossier sous forme de ZIP. Décompresse-le à un emplacement de ton choix (idéalement <code>Desktop</code> ou <code>Documents</code>) puis <strong>ouvre-le dans Claude Code (via VS Code)</strong>. Une fois ouvert, Claude lit automatiquement <code>CLAUDE.md</code> qui contient toutes les règles Empirik — pas besoin de lui rappeler manuellement.</p>
+
+  <div class="critical">
+    <div class="critical-header">
+      <span class="critical-badge">⚠ IMPORTANT</span>
+      <h4 class="critical-title">Merci de remplacer les clés API Gemini et OpenAI par les vôtres dès que possible</h4>
+    </div>
+    <p>Les clés livrées dans <code>clé-api-gemini.md</code> et <code>clé-api-openai.md</code> sont <strong>celles personnelles de l'expéditeur</strong>. Si vous les utilisez en production, <strong>Yannick va voir une consommation grimper sur le compte de l'expéditeur</strong> alors que ce n'est pas lui qui consomme — ça va perturber le suivi des dépenses de l'agence.</p>
+    <ul>
+      <li><strong><code>clé-api-gemini.md</code></strong> et <strong><code>clé-api-openai.md</code></strong> servent à générer des images IA (notamment la slide de couverture et les visuels concepts). <strong>À remplacer par les vôtres rapidement</strong> :
+        <ul>
+          <li>Soit créer la vôtre : Gemini → <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> · OpenAI → <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a></li>
+          <li>Soit demander une clé personnelle à Yannick</li>
+        </ul>
+      </li>
+      <li><strong><code>clé-api-dataforseo.md</code></strong> : celle de Yannick directement, vous pouvez la garder telle quelle, <strong>pas de souci</strong>.</li>
+    </ul>
+    <p>Une fois récupérée, éditer simplement le fichier <code>clé-api-gemini.md</code> et/ou <code>clé-api-openai.md</code> à la racine et y coller votre clé à la place. Détails techniques sur l'usage des clés en §3 étape 7.</p>
+  </div>
+
+  <!-- ============================== -->
+  <h2><span class="num">2.</span> Le prompt unique (le plus rapide)</h2>
+
+  <p>Si tu veux que Claude Code fasse tout d'un coup — vérifier, installer ce qui manque, configurer et auditer — colle ce prompt. C'est la voie recommandée pour la majorité des utilisateurs.</p>
+
+  <div class="prompt-block">
+    <button class="copy-btn" onclick="copyPrompt(this)">Copier le prompt</button>
+    <div class="label">Setup complet automatique</div>
+    <div class="text">Setup environnement complet pour le projet Empirik de génération de slides. Étape par étape, vérifie et installe si manquant : (1) Node.js LTS ≥ 20 et npm (via winget sous Windows, brew sous macOS, package manager natif sous Linux), (2) Python 3.10+ et pip (idem), (3) LibreOffice (idem ; sous Windows confirme le chemin C:\Program Files\LibreOffice\program\soffice.exe), (4) packages npm globaux : pptxgenjs, react-icons, react, react-dom, sharp ; sous Windows configure aussi NODE_PATH=%APPDATA%\npm\node_modules, (5) packages Python pip : markitdown[pptx], Pillow, PyMuPDF, google-generativeai, matplotlib, (6) famille Poppins (ExtraLight 200, Light 300, Regular 400, Medium 500, SemiBold 600, Bold 700) — si manquante, télécharge depuis Google Fonts et installe (Windows : copie dans %LOCALAPPDATA%\Microsoft\Windows\Fonts qui ne demande pas admin ; macOS : ~/Library/Fonts), (7) validité des 3 clés API en lisant clé-api-gemini.md, clé-api-openai.md, clé-api-dataforseo.md et en faisant un ping minimal pour chacune. À la fin, génère un rapport checklist ✅/❌ avec actions correctives pour chaque ❌. Demande-moi confirmation avant toute installation qui pourrait demander mon mot de passe ou un accès admin.</div>
+  </div>
+
+  <div class="note">
+    <strong>Et si tu veux contrôler chaque étape ?</strong> Section §3 ci-dessous : un prompt par dépendance, à exécuter dans l'ordre. Utile si tu veux comprendre ce qui se passe ou si une étape échoue.
+  </div>
+
+  <!-- ============================== -->
+  <h2><span class="num">3.</span> Setup étape par étape (option contrôle)</h2>
+
+  <p>Pour chaque dépendance, un prompt dédié à coller dans Claude Code. À enchaîner dans l'ordre proposé. Claude vérifie l'état actuel avant toute installation.</p>
+
+  <!-- ÉTAPE 1 : Node.js -->
+  <div class="step">
+    <div class="step-header">
+      <span class="step-num">1</span>
+      <h3 class="step-title">Node.js + npm</h3>
+      <span class="tag tag-required">Obligatoire</span>
+    </div>
+    <p class="why">PptxGenJS (la librairie qui génère les .pptx) tourne sous Node.js. Sans Node, rien ne sort.</p>
+
+    <div class="prompt-block">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copier le prompt</button>
+      <div class="label">Prompt à coller dans Claude Code</div>
+      <div class="text">Vérifie si Node.js (LTS ≥ 20) et npm sont installés sur cette machine. Si non, installe-les automatiquement (winget install OpenJS.NodeJS.LTS sous Windows ; brew install node sous macOS ; gestionnaire natif sous Linux). Demande-moi confirmation avant l'installation si elle nécessite un accès admin. Une fois fait, affiche les versions installées.</div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 2 : Python -->
+  <div class="step">
+    <div class="step-header">
+      <span class="step-num">2</span>
+      <h3 class="step-title">Python 3.10+ et pip</h3>
+      <span class="tag tag-required">Obligatoire</span>
+    </div>
+    <p class="why">Plusieurs scripts utilisent Python : génération d'images Gemini, extraction de texte des PPTX, conversion PDF → images pour la QA visuelle.</p>
+
+    <div class="prompt-block">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copier le prompt</button>
+      <div class="label">Prompt à coller dans Claude Code</div>
+      <div class="text">Vérifie si Python ≥ 3.10 et pip sont installés et accessibles dans le PATH. Si manquant, installe-les automatiquement (winget install Python.Python.3.12 sous Windows en cochant "Add Python to PATH" ; brew install python sous macOS ; gestionnaire natif sous Linux). Demande-moi confirmation avant toute action admin. Affiche les versions à la fin.</div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 : LibreOffice -->
+  <div class="step">
+    <div class="step-header">
+      <span class="step-num">3</span>
+      <h3 class="step-title">LibreOffice</h3>
+      <span class="tag tag-required">Obligatoire</span>
+    </div>
+    <p class="why">Convertit les .pptx en PDF pour la QA visuelle (PDF → JPG via PyMuPDF). Sans LibreOffice, impossible de vérifier le rendu final des slides.</p>
+
+    <div class="prompt-block">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copier le prompt</button>
+      <div class="label">Prompt à coller dans Claude Code</div>
+      <div class="text">Vérifie si LibreOffice est installé (cherche le binaire soffice/soffice.exe selon mon OS). Si non, installe-le automatiquement (winget install TheDocumentFoundation.LibreOffice sous Windows ; brew install --cask libreoffice sous macOS ; gestionnaire natif sous Linux). Si oui, affiche le chemin complet et teste avec une conversion .pptx → PDF minimale pour confirmer que ça fonctionne.</div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 4 : npm globaux -->
+  <div class="step">
+    <div class="step-header">
+      <span class="step-num">4</span>
+      <h3 class="step-title">Dépendances npm globales</h3>
+      <span class="tag tag-required">Obligatoire</span>
+    </div>
+    <p class="why">PptxGenJS pour générer les .pptx, react-icons pour les icônes, sharp pour le traitement d'images. En global pour réutilisation sur tous tes projets.</p>
+
+    <div class="prompt-block">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copier le prompt</button>
+      <div class="label">Prompt à coller dans Claude Code</div>
+      <div class="text">Installe les dépendances npm globales pour le projet Empirik : pptxgenjs, react-icons, react, react-dom, sharp. Sous Windows, configure aussi la variable d'environnement NODE_PATH vers %APPDATA%\npm\node_modules (commande : setx NODE_PATH "%APPDATA%\npm\node_modules"). Vérifie ensuite que pptxgenjs est bien trouvable en faisant un test require depuis Node.</div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 5 : pip -->
+  <div class="step">
+    <div class="step-header">
+      <span class="step-num">5</span>
+      <h3 class="step-title">Dépendances Python (pip)</h3>
+      <span class="tag tag-required">Obligatoire</span>
+    </div>
+    <p class="why">markitdown lit les .pptx (vérification du texte), PyMuPDF convertit PDF → JPG (QA visuelle slide par slide), google-generativeai génère les images Gemini (cover, sections, concepts), Pillow traite les images, matplotlib génère les graphes complexes en PNG (slope graph, line chart, dot plot, heatmap, waterfall — Voie 3 de génération, cf CLAUDE.md §6.6).</p>
+
+    <div class="prompt-block">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copier le prompt</button>
+      <div class="label">Prompt à coller dans Claude Code</div>
+      <div class="text">Installe les dépendances Python pip pour le projet Empirik : markitdown[pptx], Pillow, PyMuPDF, google-generativeai, matplotlib. Si pip n'est pas reconnu, utilise python -m pip. Une fois installé, fais un test d'import de chaque package pour confirmer qu'ils marchent (attention : PyMuPDF s'importe sous le nom fitz).</div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 6 : Polices Poppins -->
+  <div class="step">
+    <div class="step-header">
+      <span class="step-num">6</span>
+      <h3 class="step-title">Polices Poppins (toutes variantes)</h3>
+      <span class="tag tag-required">Obligatoire</span>
+    </div>
+    <p class="why">La charte Empirik utilise Poppins partout avec des variantes spécifiques (ExtraLight 200, Regular 400, Medium 500, SemiBold 600, Bold 700). Si elles ne sont pas installées, les .pptx tombent sur une police de substitution et le rendu est cassé (cf. erreur récurrente #2 du process anti-erreurs).</p>
+
+    <div class="prompt-block">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copier le prompt</button>
+      <div class="label">Prompt à coller dans Claude Code</div>
+      <div class="text">Vérifie si la famille Poppins est installée sur ma machine, en particulier les variantes ExtraLight (200), Light (300), Regular (400), Medium (500), SemiBold (600), Bold (700) — toutes nécessaires pour la charte Empirik. Si certaines variantes manquent, télécharge la famille complète depuis Google Fonts (https://fonts.google.com/specimen/Poppins, ZIP "Download family"), dézippe, et installe les .ttf manquants : sous Windows, copie-les dans %LOCALAPPDATA%\Microsoft\Windows\Fonts (ne demande pas admin) ; sous macOS, copie-les dans ~/Library/Fonts ; sous Linux, dans ~/.local/share/fonts puis lance fc-cache -fv. Confirme à la fin que toutes les variantes sont reconnues par le système.</div>
+    </div>
+
+    <div class="note">
+      <strong>Si Claude n'arrive pas à installer les fonts automatiquement</strong> (cas rare sous Windows verrouillé) : télécharge la famille depuis <a href="https://fonts.google.com/specimen/Poppins" target="_blank">fonts.google.com/specimen/Poppins</a>, dézippe, sélectionne les .ttf manquants, clic droit → "Installer pour tous les utilisateurs".
+    </div>
+  </div>
+
+  <!-- ÉTAPE 7 : Clés API -->
+  <div class="step">
+    <div class="step-header">
+      <span class="step-num">7</span>
+      <h3 class="step-title">Clés API</h3>
+      <span class="tag tag-required">Obligatoire (au moins Gemini)</span>
+    </div>
+    <p class="why">Trois clés API utilisées dans le projet :</p>
+    <ul>
+      <li><strong>Gemini</strong> (<code>clé-api-gemini.md</code>) — génération d'images IA pour les slides (cover, sections, concepts visuels). La plus utilisée.</li>
+      <li><strong>OpenAI</strong> (<code>clé-api-openai.md</code>) — alternative à Gemini pour génération d'images (et analyses entité de marque LLM type notebook V9).</li>
+      <li><strong>DataForSEO</strong> (<code>clé-api-dataforseo.md</code>) — data SEO (volumes de recherche, SERP scraping, etc.).</li>
+    </ul>
+
+    <div class="critical">
+      <div class="critical-header">
+        <span class="critical-badge">⚠ IMPORTANT</span>
+        <h4 class="critical-title">Gemini + OpenAI : remplacer par TES propres clés</h4>
+      </div>
+      <p><strong>Les clés Gemini et OpenAI livrées appartiennent personnellement à l'expéditeur du dossier.</strong> Si tu les utilises en production, Yannick va voir une consommation grimper sur ce compte personnel alors que ce n'est pas l'expéditeur qui consomme — <strong>ça perturbe le suivi des dépenses agence et risque d'alerter Yannick sur une consommation anormale</strong>.</p>
+      <p>👉 <strong>Ce qu'il faut faire</strong> dès que tu peux :</p>
+      <ul>
+        <li>Soit créer tes propres clés :
+          <ul>
+            <li>Gemini → <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> (gratuit avec quota généreux)</li>
+            <li>OpenAI → <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a> (compte avec crédit)</li>
+          </ul>
+        </li>
+        <li>Soit <strong>demander une clé personnelle à Yannick</strong> (il gère les comptes agence).</li>
+      </ul>
+      <p>Ensuite, éditer <code>clé-api-gemini.md</code> et <code>clé-api-openai.md</code> à la racine du projet et y coller ta clé. <strong>C'est la seule étape vraiment manuelle</strong> du setup.</p>
+    </div>
+
+    <div class="note">
+      <strong>DataForSEO</strong> (<code>clé-api-dataforseo.md</code>) : <strong>c'est la clé de Yannick directement</strong>, pas de souci, tu peux l'utiliser et la garder telle quelle. Pas d'action à prendre dessus.
+    </div>
+
+    <div class="prompt-block">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copier le prompt</button>
+      <div class="label">Prompt à coller dans Claude Code (test des clés)</div>
+      <div class="text">Lis les fichiers clé-api-gemini.md, clé-api-openai.md et clé-api-dataforseo.md à la racine. Pour chaque clé, fais un appel test minimal (ping/auth uniquement, pas de génération volumineuse) pour vérifier qu'elles sont valides et fonctionnelles. Signale-moi celles qui ne marchent pas et propose les liens pour en créer de nouvelles si besoin. RAPPEL CRITIQUE : si je te dis que j'ai mis mes propres clés Gemini ou OpenAI, vérifie spécifiquement qu'elles sont bien personnelles (pas celles de l'expéditeur initial). Pour DataForSEO, c'est normal que la clé soit celle de Yannick, ne pas demander de la remplacer.</div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ============================== -->
+  <h2><span class="num">4.</span> Vérification globale</h2>
+
+  <p>Que tu aies utilisé le prompt unique (§2) ou les étapes individuelles (§3), termine par cet audit pour t'assurer que tout est en place :</p>
+
+  <div class="prompt-block">
+    <button class="copy-btn" onclick="copyPrompt(this)">Copier le prompt</button>
+    <div class="label">Audit complet de l'environnement</div>
+    <div class="text">Fais un audit complet de mon environnement pour le projet Empirik. Vérifie : (1) versions Node.js et npm, (2) Python ≥ 3.10 et pip, (3) chemin LibreOffice et qu'il convertit bien un .pptx test en PDF, (4) packages npm globaux (pptxgenjs, react-icons, react, react-dom, sharp), (5) packages Python (markitdown, Pillow, PyMuPDF/fitz, google-generativeai, matplotlib), (6) variable NODE_PATH sous Windows, (7) toutes les variantes Poppins installées (ExtraLight, Light, Regular, Medium, SemiBold, Bold), (8) validité des 3 clés API. Génère un rapport synthétique en checklist avec ✅ ou ❌ devant chaque point, et donne-moi un prompt prêt à coller pour corriger chaque ❌.</div>
+  </div>
+
+  <!-- ============================== -->
+  <h2><span class="num">5.</span> Premier lancement</h2>
+
+  <p>Quand tout est installé et validé, voici comment démarrer une présentation. Ouvre Claude Code sur ce dossier et utilise ce prompt :</p>
+
+  <div class="prompt-block">
+    <button class="copy-btn" onclick="copyPrompt(this)">Copier le prompt</button>
+    <div class="label">Démarrer une nouvelle présentation</div>
+    <div class="text">Je veux créer une nouvelle présentation pour [NOM DU CLIENT]. Le sujet est : [SUJET]. Le public cible est : [DIRECTION MARKETING / COMITÉ DE DIRECTION / ÉQUIPE TECHNIQUE / ETC.]. L'objectif est : [PITCH / AUDIT / BILAN / RESTITUTION DATA / ETC.]. Voici les inputs disponibles : [LISTE DES FICHIERS / DATA / BRIEF]. Applique strictement le workflow CLAUDE.md en 8 étapes : (1) lis CLAUDE.md + PROCESS-ANTI-ERREURS.md + MASTER-CHECKLIST.md + guide_design_slides.md + guide-slides-data-storytelling.md + guide_storytelling_presentations.md + dataviz-guide.md, (2) propose-moi 2 à 3 angles narratifs distincts avec structure et nombre de slides estimé, (3) attends ma validation, (4) détaille le plan slide par slide avec type de graphique justifié pour chaque slide data, (5) attends mon go final, (6) génère le .pptx, (7) lance la QA structurée, (8) PRODUIS LE RAPPORT QA EXHAUSTIF en remplissant MASTER-CHECKLIST.md (~150 items, ✅/❌ avec preuves point par point, score global, défauts résiduels arbitrés). N'engage AUCUNE génération avant ma validation explicite du plan, et ne livre AUCUN .pptx sans le rapport QA. En pre-flight : liste les marques/outils à intégrer en logos, lance scripts/fetch_logos.py pour les manquants.</div>
+  </div>
+
+  <div class="note">
+    Remplace les [PLACEHOLDERS] par les informations réelles de ton projet. Plus tu donnes de contexte, meilleurs sont les angles narratifs proposés.
+  </div>
+
+  <!-- ============================== -->
+  <h2><span class="num">6.</span> Comprendre le workflow Empirik</h2>
+
+  <p>Claude suit un workflow obligatoire en 8 étapes. <strong>Aucune slide n'est générée sans validation explicite</strong> du plan par toi, et <strong>aucun .pptx n'est livré sans rapport QA exhaustif</strong> (MASTER-CHECKLIST, ~150 items, ✅/❌ avec preuves).</p>
+
+  <table>
+    <thead>
+      <tr><th>Étape</th><th>Ce que fait Claude</th><th>Ce que tu fais</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Lit les 4 guides silencieusement</td><td>Rien (automatique)</td></tr>
+      <tr><td>2</td><td>Propose 2-3 angles narratifs distincts</td><td>Lis les options</td></tr>
+      <tr><td>3</td><td>Attend ta validation</td><td>Choisis une option, ou mixe les éléments</td></tr>
+      <tr><td>4</td><td>Détaille le plan slide par slide + type de graphique justifié + mécanique storytelling par section</td><td>Lis et valide ou corrige</td></tr>
+      <tr><td>5</td><td>Attend ton "go" final</td><td>Donne le "go"</td></tr>
+      <tr><td>6</td><td>Génère le .pptx avec PptxGenJS</td><td>Patiente</td></tr>
+      <tr><td>7</td><td>Lance la QA structurée (checklist par slide, vérification visuelle)</td><td>Patiente</td></tr>
+      <tr><td>8</td><td><strong>Produit le rapport QA exhaustif (MASTER-CHECKLIST rempli, ~150 items, ✅/❌ avec preuves)</strong></td><td>Reçois le livrable .pptx + le rapport QA détaillé</td></tr>
+    </tbody>
+  </table>
+
+  <p>Les règles complètes (charte design, règles dataviz, règles storytelling, règles techniques PptxGenJS) sont dans <code>CLAUDE.md</code>. Tu n'as pas besoin de les lire — Claude les applique automatiquement.</p>
+
+  <!-- ============================== -->
+  <h2><span class="num">7.</span> Structure du dossier</h2>
+
+  <table>
+    <thead>
+      <tr><th>Fichier / Dossier</th><th>Rôle</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>CLAUDE.md</code></td><td>Source unique de vérité (toutes les règles de fond)</td></tr>
+      <tr><td><code>PROCESS-ANTI-ERREURS.md</code></td><td>Checklist tactique + 7 erreurs récurrentes + helpers code PptxGenJS</td></tr>
+      <tr><td><code>MASTER-CHECKLIST.md</code></td><td><strong>Rapport QA obligatoire à produire pour chaque pres</strong> — ~150 items, garantit l'application de toutes les règles</td></tr>
+      <tr><td><code>guide_design_slides.md</code></td><td>Détails design (charte, types de slides)</td></tr>
+      <tr><td><code>guide_storytelling_presentations.md</code></td><td>Méthode Nancy Duarte</td></tr>
+      <tr><td><code>dataviz-guide.md</code></td><td>Référence Wilke pour les graphiques</td></tr>
+      <tr><td><code>guide-slides-data-storytelling.md</code></td><td>Méthode Knaflic (Storytelling with Data)</td></tr>
+      <tr><td><code>DESIGN_EMPIRIK.md</code></td><td>7 types d'assets visuels + prompts Gemini</td></tr>
+      <tr><td><code>SETUP.html</code></td><td>Ce fichier</td></tr>
+      <tr><td><code>scripts/generate_image.py</code></td><td>Génération d'images Gemini pour les slides (cover, sections, concepts visuels)</td></tr>
+      <tr><td><code>scripts/fetch_logos.py</code></td><td>Récupération automatique des logos officiels (4 couches : simpleicons CDN → Wikipedia Commons API → scraping HTML multi-pages → brandfetch.com)</td></tr>
+      <tr><td><code>scripts/generate_chart.py</code></td><td>Génération de graphes complexes en PNG via Python matplotlib (slope graph, line chart, dot plot, heatmap, waterfall) — <strong>Voie 3</strong> de génération, recommandée dès qu'on dépasse les barres simples</td></tr>
+      <tr><td><code>assets/</code></td><td>Logos réutilisables + backgrounds Empirik</td></tr>
+      <tr><td><code>Logos-Empirik.png</code></td><td>Logo agence (cover slide)</td></tr>
+      <tr><td><code>clé-api-*.md</code></td><td>Clés API (à remplacer par les tiennes)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============================== -->
+  <h2><span class="num">8.</span> Bonnes pratiques</h2>
+
+  <h3>Crée un sous-dossier par projet</h3>
+  <p>Pour chaque nouveau client/présentation, crée un dossier dédié à la racine. Exemple : <code>aviva-geo-bilan/</code>, <code>fiducial-pitch/</code>. Mets-y :</p>
+  <ul>
+    <li><code>data-brute/</code> — fichiers de data source (Excel, CSV, exports)</li>
+    <li><code>assets/</code> — images spécifiques au projet (logos client, screenshots)</li>
+    <li><code>output/</code> — les .pptx générés</li>
+    <li><code>scripts/</code> — le ou les fichiers <code>build_xxx.js</code></li>
+    <li><code>README.md</code> — brief du projet, décisions prises</li>
+  </ul>
+
+  <h3>Toujours partir des guides, jamais de l'inspiration</h3>
+  <p>Le workflow Empirik repose sur des règles précises (charte, top-down McKinsey, titres-constats, etc.). Ne demande pas à Claude de "s'inspirer de cette pres" — laisse-le appliquer le système.</p>
+
+  <h3>Faire valider le plan avant chaque génération</h3>
+  <p>C'est la règle n°1. Une slide générée sans plan validé est une slide à refaire.</p>
+
+  <!-- ============================== -->
+  <h2><span class="num">9.</span> Dépannage</h2>
+
+  <details>
+    <summary>"Cannot find module 'pptxgenjs'"</summary>
+    <p>Le NODE_PATH n'est pas configuré (Windows) ou les packages npm globaux ne sont pas installés. Re-fais l'étape 4 (§3). Sous Windows, ferme et rouvre le terminal après <code>setx NODE_PATH</code>.</p>
+  </details>
+
+  <details>
+    <summary>Les titres rendent en Regular au lieu de SemiBold</summary>
+    <p>Les variantes Poppins ne sont pas toutes installées sur ton OS, ou le script utilise <code>fontWeight</code> au lieu de <code>fontFace: "Poppins SemiBold"</code>. Vérifie l'étape 6 (§3) + lis <code>PROCESS-ANTI-ERREURS.md</code> erreur #2.</p>
+  </details>
+
+  <details>
+    <summary>"soffice not found" lors de la conversion PDF</summary>
+    <p>LibreOffice n'est pas installé ou pas dans le PATH. Repasse à l'étape 3 (§3). Sous Windows, appelle directement <code>"C:\Program Files\LibreOffice\program\soffice.exe"</code>.</p>
+  </details>
+
+  <details>
+    <summary>"AF_UNIX is not supported" sous Windows</summary>
+    <p>Tu utilises le wrapper <code>soffice.py</code> au lieu du binaire direct. Appelle <code>soffice.exe</code> directement (chemin complet entre guillemets).</p>
+  </details>
+
+  <details>
+    <summary>Les images Gemini échouent</summary>
+    <p>Soit la clé API est invalide, soit le quota est dépassé, soit le modèle a changé. Vérifie la clé dans <code>clé-api-gemini.md</code> et le modèle utilisé dans <code>CLAUDE.md §6.4</code> (par défaut : <code>gemini-3-pro-image-preview</code>).</p>
+  </details>
+
+  <details>
+    <summary>PyMuPDF échoue à l'import</summary>
+    <p>Installe-le avec <code>pip install PyMuPDF</code> (pas <code>pip install fitz</code> qui est un autre package). Le module Python s'appelle <code>fitz</code> mais le package pip est PyMuPDF.</p>
+  </details>
+
+  <!-- ============================== -->
+  <div class="checklist">
+    <h4>✅ Tu es prêt quand :</h4>
+    <ul>
+      <li>Claude Code ouvre le dossier sans erreur</li>
+      <li>L'audit complet (§4) retourne tous les ✅</li>
+      <li>Le prompt de premier lancement (§5) lance la lecture de TOUS les guides + MASTER-CHECKLIST</li>
+      <li>Claude propose 2-3 angles narratifs et attend ta validation</li>
+      <li>Claude annonce qu'il produira le rapport QA exhaustif (MASTER-CHECKLIST rempli) à la livraison</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    Empirik · better with data
+    <div class="yellow-pattern" style="margin-top: 10px;">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.parentElement.querySelector('pre');
+  const text = pre.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copié ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copier';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+function copyPrompt(btn) {
+  const text = btn.parentElement.querySelector('.text').textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copié ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copier le prompt';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>

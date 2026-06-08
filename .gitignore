@@ -1,0 +1,72 @@
+# ─── Clés API personnelles (ne JAMAIS pusher) ─────────────────────────
+# Chaque collègue met ses propres clés en local, jamais dans le repo
+clé-api-gemini.md
+clé-api-openai.md
+clé-api-dataforseo.md
+.env
+*.env
+
+# ─── Outputs générés par présentation (locaux, confidentiels clients) ─
+*.pptx
+*.pdf
+build_*.js
+build_*.html
+qa-rapport-*.md
+qa-slides/
+qa-slides-*/
+*.tmp.txt
+
+# ─── Charts générés par présentation (re-générables, propres au client)
+assets/charts/*.png
+assets/charts/*.svg
+assets/charts/*.jpg
+assets/charts/*.overlays.json
+assets/charts/*.json
+
+# ─── Images de cover / sections générées par présentation ─────────────
+# (les backgrounds génériques cover-bg.png, workflow-bg.png restent versionnés)
+assets/*-cover.png
+assets/*-cover-cropped.png
+assets/*-section.png
+assets/*-concept.png
+
+# ─── Logos spécifiques à un client (re-fetchables via fetch_logos.py) ─
+# Les logos génériques (LLMs, tech brands, social) restent versionnés
+# Si tu télécharges des logos pour un client précis, range-les dans assets/logos/clients/
+assets/logos/clients/
+
+# ─── Dossiers de travail par présentation ─────────────────────────────
+# Chaque pres dans son sous-dossier, jamais pushé
+projects/
+presentations/
+pres-*/
+*-pres/
+
+# ─── Cache Python ─────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# ─── Node ─────────────────────────────────────────────────────────────
+node_modules/
+package-lock.json
+yarn.lock
+
+# ─── OS / Editeurs ────────────────────────────────────────────────────
+desktop.ini
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# ─── Brouillons / drafts ──────────────────────────────────────────────
+brouillon_*.txt
+draft_*.txt
+notes_*.md
+*.draft.md
