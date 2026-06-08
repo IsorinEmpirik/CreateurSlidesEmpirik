@@ -26,13 +26,24 @@ assets/charts/*.json
 # ─── Images de cover / sections générées par présentation ─────────────
 # (les backgrounds génériques cover-bg.png, workflow-bg.png restent versionnés)
 assets/*-cover.png
+assets/cover-*.png
 assets/*-cover-cropped.png
+assets/cover-*-cropped.png
 assets/*-section.png
+assets/section-*.png
 assets/*-concept.png
+assets/concept-*.png
+assets/*-closing.png
+assets/closing-*.png
+assets/*-backdrop.png
+assets/backdrop-*.png
+# Cas particulier : si un nom de client commence/finit l'image
+# (ex : cover-velura.png, closing-aviva.png) → matché ci-dessus
 
 # ─── Logos spécifiques à un client (re-fetchables via fetch_logos.py) ─
 # Les logos génériques (LLMs, tech brands, social) restent versionnés
-# Si tu télécharges des logos pour un client précis, range-les dans assets/logos/clients/
+# Logos clients spécifiques (nom propre du client) → à ignorer
+# Convention : ranger les logos d'un client précis dans assets/logos/clients/
 assets/logos/clients/
 
 # ─── Dossiers de travail par présentation ─────────────────────────────
@@ -41,6 +52,28 @@ projects/
 presentations/
 pres-*/
 *-pres/
+
+# ─── Fichiers temporaires de génération par présentation ──────────────
+# Outputs intermédiaires (extractions markitdown, plans détaillés, logs)
+markitdown-*.txt
+markitdown-*.md
+phase*-plan.md
+phase*-*-plan.md
+plan-detaille-*.md
+artifact-*-*.md
+
+# ─── Scripts ad-hoc spécifiques à une pres (à ne pas mélanger avec scripts/ génériques) ──
+# Convention : tout script avec un nom de client/projet dans son nom = local
+scripts/check_accents_*.py
+scripts/fix_accents_*.py
+scripts/generate_*_images.py
+scripts/generate_*_chart.py
+scripts/generate_*_charts.py
+scripts/generate_slide*_*.py
+scripts/*.log
+scripts/*-velura*
+scripts/*-aviva*
+scripts/*-client*
 
 # ─── Cache Python ─────────────────────────────────────────────────────
 __pycache__/
